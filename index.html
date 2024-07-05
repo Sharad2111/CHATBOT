@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #response {
+            white-space: pre-wrap; /* Preserve line breaks and wrap text */
+            max-width: 100%; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+    <h1>Chatbot Interface</h1>
+    <form id="chatbot-form">
+        <label for="input_text">Enter your question:</label><br>
+        <input type="text" id="input_text" name="input_text" required><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <h2>Response:</h2>
+    <p id="response"></p>
+
+    <script>
+        $(document).ready(function(){
+            $('#chatbot-form').on('submit', function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: '/generate',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(data){
+                        $('#response').text(data.generated_text);
+                    },
+                    error: function(error){
+                        $('#response').text('Error generating response.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
