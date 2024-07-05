@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
 
@@ -11,22 +11,18 @@ model = GPT2LMHeadModel.from_pretrained(model_path)
 
 @app.route('/')
 def home():
-    return "Welcome to the Chatbot API!"
+    return render_template('index.html')
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    data = request.json
-    if 'input_text' not in data:
-        return jsonify({"error": "No input_text field provided in JSON"}), 400
-
-    input_text = data['input_text']
+    input_text = request.form['input_text']
     inputs = tokenizer(input_text, return_tensors="pt")
 
     # Generate a response
     with torch.no_grad():
         outputs = model.generate(
             inputs.input_ids,
-            max_length=150,
+            max_length=1e9,
             num_return_sequences=1,
             no_repeat_ngram_size=2,
             top_p=0.95,
