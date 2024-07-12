@@ -1,41 +1,427 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot with Categories</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            flex-grow: 1;
+        }
+
+        #chat-box {
+            width: 100%;
+            background-color: #c5c1c1;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .category, .subcategory, .question {
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .category {
+            background-color: #ffffff;
+            margin: 5px 0;
+        }
+
+        .subcategory {
+            background-color: #faf4f4;
+            margin: 5px 20px;
+            display: none;
+        }
+
+        .question {
+            background-color: #e6e9ee;
+            margin: 5px 40px;
+            display: none;
+        }
+
+        .bot-response {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f7f4;
+            border-radius: 4px;
+            text-align: left;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <div id="chat-container">
+        <div id="chat-box">
+            <div class="category">General Enquiries
+                <div class="subcategory">Personal Information
+                    <div class="question">How do I update my personal information (e.g., address, phone number)?</div>
+                    <div class="question">What do you do?</div>
+                </div>
+                <div class="subcategory">IT and Support
+                    <div class="question">Who do I contact for IT support?</div>
+                    <div class="question">How do I access my work email or other company systems?</div>
+                </div>
+                <div class="subcategory">Company Culture and Activities
+                    <div class="question">What are the company's working hours and holiday schedule?</div>
+                    <div class="question">How can I get involved in company events or activities?</div>
+                </div>
+            </div>
+            <div class="category">Benefits and Perks
+                <div class="subcategory">Health and Wellness
+                    <div class="question">What health insurance options are available to me?</div>
+                    <div class="question">How do I enroll in the company's retirement plan?</div>
+                </div>
+                <div class="subcategory">Other Benefits
+                    <div class="question">What other benefits am I eligible for?</div>
+                    <div class="question">How do I use my benefits (e.g., gym membership, wellness programs)?</div>
+                    <div class="question">How do I claim expenses or reimbursements?</div>
+                </div>
+            </div>
+            <div class="category">Leave and Time Off
+                <div class="subcategory">Vacation and Paid Time Off
+                    <div class="question">How do I apply for vacation leave?</div>
+                    <div class="question">How many days of vacation am I entitled to?</div>
+                    <div class="question">How do I check my leave balance?</div>
+                </div>
+                <div class="subcategory">Sick Leave and Personal Leave
+                    <div class="question">How do I apply for sick leave?</div>
+                    <div class="question">What is the company's policy on unpaid leave?</div>
+                    <div class="question">How do I request time off for personal reasons?</div>
+                </div>
+            </div>
+            <div class="category">Policies and Procedures
+                <div class="subcategory">Company Policies
+                    <div class="question">Where can I find the employee handbook or company policies?</div>
+                    <div class="question">What is the company's policy on remote work?</div>
+                    <div class="question">What is the dress code policy?</div>
+                </div>
+                <div class="subcategory">Reporting and Compliance
+                    <div class="question">How do I report a workplace incident or violation of policy?</div>
+                    <div class="question">What is the process for filing a formal complaint?</div>
+                </div>
+            </div>
+            <div class="category">Payroll and Compensation
+                <div class="subcategory">Salary and Wages
+                    <div class="question">When will I receive my paycheck?</div>
+                    <div class="question">How is my salary calculated?</div>
+                    <div class="question">How do I understand my payslip?</div>
+                    <div class="question">How do I report a payroll discrepancy?</div>
+                    <div class="question">What is the process for requesting a salary advance?</div>
+                </div>
+                <div class="subcategory">Bonuses and Incentives
+                    <div class="question">When are bonuses paid out?</div>
+                    <div class="question">How are performance incentives calculated?</div>
+                    <div class="question">How do I qualify for bonuses or incentives?</div>
+                </div>
+            </div>
+        </div>
+        <div class="bot-response" id="bot-response"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.category').forEach(category => {
+                category.addEventListener('click', function () {
+                    // Toggle the display of subcategories
+                    const subcategories = this.querySelectorAll('.subcategory');
+                    subcategories.forEach(subcategory => {
+                        subcategory.style.display = subcategory.style.display === 'block' ? 'none' : 'block';
+                    });
+                });
+            });
+
+            document.querySelectorAll('.subcategory').forEach(subcategory => {
+                subcategory.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    // Toggle the display of questions within the subcategory
+                    const questions = this.querySelectorAll('.question');
+                    questions.forEach(question => {
+                        question.style.display = question.style.display === 'block' ? 'none' : 'block';
+                    });
+                });
+            });
+
+            document.querySelectorAll('.question').forEach(question => {
+                question.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    var userQuestion = this.textContent;
+                    fetch('/get_response', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'user_input=' + encodeURIComponent(userQuestion)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('bot-response').innerText = 'Chatbot: ' + data;
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Interface</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Chatbot with Categories</title>
     <style>
-        #response {
-            white-space: pre-wrap; /* Preserve line breaks and wrap text */
-            max-width: 100%; /* Adjust as needed */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            flex-grow: 1;
+        }
+
+        #chat-box {
+            width: 100%;
+            background-color: #c5c1c1;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .category, .subcategory, .question {
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .category {
+            background-color: #ffffff;
+            margin: 5px 0;
+        }
+
+        .subcategory {
+            background-color: #faf4f4;
+            margin: 5px 20px;
+            display: none;
+        }
+
+        .question {
+            background-color: #e6e9ee;
+            margin: 5px 40px;
+            display: none;
+        }
+
+        .bot-response {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f7f4;
+            border-radius: 4px;
+            text-align: left;
+            width: 100%;
+        }
+
+        #custom-query-form {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        #custom-query-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #c5c1c1;
+        }
+
+        #custom-query-form button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #custom-query-form button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Chatbot Interface</h1>
-    <form id="chatbot-form">
-        <label for="input_text">Enter your question:</label><br>
-        <input type="text" id="input_text" name="input_text" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
-    <h2>Response:</h2>
-    <p id="response"></p>
+    <h1>Chatbot</h1>
+    <div id="chat-container">
+        <div id="chat-box">
+            <div class="category">General Enquiries
+                <div class="subcategory">Personal Information
+                    <div class="question">How do I update my personal information (e.g., address, phone number)?</div>
+                    <div class="question">What do you do?</div>
+                </div>
+                <div class="subcategory">IT and Support
+                    <div class="question">Who do I contact for IT support?</div>
+                    <div class="question">How do I access my work email or other company systems?</div>
+                </div>
+                <div class="subcategory">Company Culture and Activities
+                    <div class="question">What are the company's working hours and holiday schedule?</div>
+                    <div class="question">How can I get involved in company events or activities?</div>
+                </div>
+            </div>
+            <div class="category">Benefits and Perks
+                <div class="subcategory">Health and Wellness
+                    <div class="question">What health insurance options are available to me?</div>
+                    <div class="question">How do I enroll in the company's retirement plan?</div>
+                </div>
+                <div class="subcategory">Other Benefits
+                    <div class="question">What other benefits am I eligible for?</div>
+                    <div class="question">How do I use my benefits (e.g., gym membership, wellness programs)?</div>
+                    <div class="question">How do I claim expenses or reimbursements?</div>
+                </div>
+            </div>
+            <div class="category">Leave and Time Off
+                <div class="subcategory">Vacation and Paid Time Off
+                    <div class="question">How do I apply for vacation leave?</div>
+                    <div class="question">How many days of vacation am I entitled to?</div>
+                    <div class="question">How do I check my leave balance?</div>
+                </div>
+                <div class="subcategory">Sick Leave and Personal Leave
+                    <div class="question">How do I apply for sick leave?</div>
+                    <div class="question">What is the company's policy on unpaid leave?</div>
+                    <div class="question">How do I request time off for personal reasons?</div>
+                </div>
+            </div>
+            <div class="category">Policies and Procedures
+                <div class="subcategory">Company Policies
+                    <div class="question">Where can I find the employee handbook or company policies?</div>
+                    <div class="question">What is the company's policy on remote work?</div>
+                    <div class="question">What is the dress code policy?</div>
+                </div>
+                <div class="subcategory">Reporting and Compliance
+                    <div class="question">How do I report a workplace incident or violation of policy?</div>
+                    <div class="question">What is the process for filing a formal complaint?</div>
+                </div>
+            </div>
+            <div class="category">Payroll and Compensation
+                <div class="subcategory">Salary and Wages
+                    <div class="question">When will I receive my paycheck?</div>
+                    <div class="question">How is my salary calculated?</div>
+                    <div class="question">How do I understand my payslip?</div>
+                    <div class="question">How do I report a payroll discrepancy?</div>
+                    <div class="question">What is the process for requesting a salary advance?</div>
+                </div>
+                <div class="subcategory">Bonuses and Incentives
+                    <div class="question">When are bonuses paid out?</div>
+                    <div class="question">How are performance incentives calculated?</div>
+                    <div class="question">How do I qualify for bonuses or incentives?</div>
+                </div>
+            </div>
+        </div>
+        <div class="bot-response" id="bot-response"></div>
+        
+        <form id="custom-query-form" method="POST" action="/submit_query">
+            <textarea name="custom_query" placeholder="Can't find your question? Ask here..."></textarea>
+            <button type="submit">Submit Query</button>
+        </form>
+    </div>
 
     <script>
-        $(document).ready(function(){
-            $('#chatbot-form').on('submit', function(event){
-                event.preventDefault();
-                $.ajax({
-                    url: '/generate',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function(data){
-                        $('#response').text(data.generated_text);
-                    },
-                    error: function(error){
-                        $('#response').text('Error generating response.');
-                    }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.category').forEach(category => {
+                category.addEventListener('click', function () {
+                    // Toggle the display of subcategories
+                    const subcategories = this.querySelectorAll('.subcategory');
+                    subcategories.forEach(subcategory => {
+                        subcategory.style.display = subcategory.style.display === 'block' ? 'none' : 'block';
+                    });
+                });
+            });
+
+            document.querySelectorAll('.subcategory').forEach(subcategory => {
+                subcategory.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    // Toggle the display of questions within the subcategory
+                    const questions = this.querySelectorAll('.question');
+                    questions.forEach(question => {
+                        question.style.display = question.style.display === 'block' ? 'none' : 'block';
+                    });
+                });
+            });
+
+            document.querySelectorAll('.question').forEach(question => {
+                question.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    var userQuestion = this.textContent;
+                    fetch('/get_response', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'user_input=' + encodeURIComponent(userQuestion)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('bot-response').innerText = 'Chatbot: ' + data;
+                    })
+                    .catch(error => console.error('Error:', error));
                 });
             });
         });
